@@ -34,7 +34,7 @@ const page = async ({ params }: PageProps) => {
 
     return (
         <Container>
-            <ChatBox />
+            <ChatBox sessionId={session} />
         </Container>
     )
 }

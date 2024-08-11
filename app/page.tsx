@@ -12,7 +12,7 @@ export default function Home() {
           <p className="text-sm font-medium leading-none">
             AI Customer Support
           </p>
-          <ChatBox />
+          <ChatBox sessionId="mock-session" />
         </Box>
       </Container>
     </section>
