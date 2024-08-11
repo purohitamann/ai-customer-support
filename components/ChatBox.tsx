@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -7,9 +8,13 @@ import Stack from '@mui/material/Stack';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 
+import { useChat } from 'ai/react';
 
-
-export default function ChatBox() {
+export default function ChatBox({ sessionId }: { sessionId: string }) {
+    const { messages, handleInputChange } = useChat({
+        api: "/api/chat",
+        body: {}
+    });
     return (
         <div className="w-full h-full" >
             <Box>
@@ -80,10 +85,13 @@ export default function ChatBox() {
                             <AvatarFallback>Usr</AvatarFallback>
                         </Avatar>
 
-                        <Input placeholder="Type here" />
-                        <Button>Send</Button>
+                        <Input placeholder="Type here" onChange={handleInputChange} />
+                        <Button  >Send</Button>
                     </section>
                 </Stack>
+                <Box>
+                    {JSON.stringify(messages)}
+                </Box>
             </Box>
         </div>
     )
