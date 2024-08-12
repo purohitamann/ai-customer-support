@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import ChatBox from "../components/ChatBox";
 import Container from "@mui/material/Container";
@@ -8,14 +9,11 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center min-h-screen py-2">
 
       <Container maxWidth="md"  >
-        <Box className="flex flex-col gap-4">
-          <p className="text-sm font-medium leading-none">
-            AI Customer Support
-          </p>
-          <ChatBox />
-        </Box>
+
+        <ChatBox sessionId="mock-session" initialMessages={[]} />
+
       </Container>
-    </section>
+    </section >
 
   );
 }

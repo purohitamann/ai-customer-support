@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -6,85 +7,54 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { type Message } from 'ai/react';
+import { useChat } from 'ai/react';
+import Messages from "./Messages"
 
-
-
-export default function ChatBox() {
+export default function ChatBox({ sessionId, initialMessages }: { sessionId: string, initialMessages: Message[] }) {
+    //under the hood this is just state
+    const { messages, handleInputChange, handleSubmit, input } = useChat({
+        api: "/api/chat",
+        body: { sessionId },
+        initialMessages
+    });
     return (
-        <div className="w-full h-full" >
+        <section className="items-center justify-center min-h-screen min-w-screen py-2">
             <Box>
+                <Box className="flex flex-col gap-4">
+                    <p className="text-sm font-medium leading-none">
+                        AI Customer Support
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        local time
+                    </p>
+
+                </Box>
                 <Stack direction={"column"} gap={4}>
                     <ScrollArea className="h-[70vh] w-full rounded-md border p-4">
-                        <Stack gap={2} className=" min-h-dvh">
-                            <Box className="flex flex-row gap-4 justify-start"  >
-                                <Avatar>
-                                    <AvatarImage src="" />
-                                    <AvatarFallback>AI</AvatarFallback>
-                                </Avatar>
-                                <div className=" flex items-center space-x-4 rounded-md border p-4">
+                        <Stack gap={3} className=" min-h-dvh">
 
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium leading-none">
-                                            Hi there! I am your AI customer support. How can I help you today?
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            you can ask me anything about your orders, shipping, returns, etc.
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </Box>
-                            <Box className="flex flex-row gap-4 justify-end">
-
-                                <div className=" flex items-center space-x-4 rounded-md border p-4">
-
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium leading-none">
-                                            The product i recieved is damaged, I'd liked to return it.
-                                        </p>
-                                        {/* <p className="text-sm text-muted-foreground">
-                                            you can ask me anything about your orders, shipping, returns, etc.
-                                        </p> */}
-                                    </div>
-                                </div>
-                                <Avatar>
-                                    <AvatarImage src="" />
-                                    <AvatarFallback>usr</AvatarFallback>
-                                </Avatar>
-
-                            </Box>
-                            <Box className="flex flex-row gap-4">
-                                <Avatar>
-                                    <AvatarImage src="" />
-                                    <AvatarFallback>AI</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col gap-2">
-
-                                    {/* <p>Hi there! How can I help you today?</p> */}
-                                    <Skeleton className="w-[100px] h-[20px] rounded-full" />
-                                    <Skeleton className="w-[200px] h-[20px] rounded-full" />
-                                </div>
-
-                            </Box>
-
-
+                            <Messages messages={messages} />
                         </Stack>
 
 
                     </ScrollArea>
-                    <section className="display flex flex-row gap-4">
 
-
+                    <form className="display flex flex-row gap-4" onSubmit={handleSubmit}>
                         <Avatar>
                             <AvatarImage src="" />
                             <AvatarFallback>Usr</AvatarFallback>
                         </Avatar>
 
-                        <Input placeholder="Type here" />
-                        <Button>Send</Button>
-                    </section>
+                        <Input value={input} placeholder="Type here" onChange={handleInputChange} />
+                        <Button type="submit"  >Send</Button>
+                    </form>
+
                 </Stack>
+                {/* <Box>
+                    {JSON.stringify(messages)}
+                </Box> */}
             </Box>
-        </div>
+        </section>
     )
 }
