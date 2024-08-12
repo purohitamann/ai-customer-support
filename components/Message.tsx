@@ -19,10 +19,7 @@ const MessageComponent = ({ content, isUserMessage }: MessageProps) => {
                 'flex-row-reverse ': isUserMessage,
                 'flex-row': !isUserMessage
             })}>
-
-
                 <Avatar>
-
                     <AvatarFallback> {isUserMessage ? <User size={24} /> : <Bot size={24} />} </AvatarFallback>
                 </Avatar>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
