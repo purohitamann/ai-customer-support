@@ -3,6 +3,8 @@ import React from 'react';
 import { redis } from '@/lib/redis';
 import ChatBox from '@/components/ChatBox';
 import { Container } from '@mui/material';
+import { Box } from '@mui/material';
+import { cookies } from 'next/headers';
 interface PageProps {
     params: {
         url: string | string[] | undefined
@@ -14,11 +16,14 @@ function reconstructURL({ url }: { url: string[] }) {
     return decodeComponents.join('/');
 }
 const page = async ({ params }: PageProps) => {
+    const sessionCookie = cookies().get("sessionid")?.value;
     console.log(params);
     const reconstructedUrl = reconstructURL({ url: params.url as string[] })
     const isAlreadyIndexed = await redis.sismember("indexed-urls", reconstructedUrl)
 
-    const session = "mock-session";
+    const sessionId = (reconstructedUrl + "--" + sessionCookie).replace(/\//g, "");
+
+    const initialMessages = await ragChat.history.getMessages({ amount: 10, sessionId });
     console.log(isAlreadyIndexed);
     if (!isAlreadyIndexed) {
         await ragChat.context.add({
@@ -33,8 +38,10 @@ const page = async ({ params }: PageProps) => {
     }
 
     return (
-        <Container>
-            <ChatBox sessionId={session} />
+        <Container maxWidth="md" >
+
+            <ChatBox sessionId={sessionId} initialMessages={initialMessages} />
+
         </Container>
     )
 }
