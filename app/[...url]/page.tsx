@@ -13,7 +13,9 @@ interface PageProps {
 
 function reconstructURL({ url }: { url: string[] }) {
     const decodeComponents = url.map((component) => decodeURIComponent(component))
+    console.log(decodeComponents);
     return decodeComponents.join('/');
+
 }
 const page = async ({ params }: PageProps) => {
     const sessionCookie = cookies().get("sessionid")?.value;
